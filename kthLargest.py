@@ -2,16 +2,12 @@ class KthLargest:
 
     def __init__(self, k: int, nums: list[int]):
         self.k = k
-        self.nums = [self.add(n) for n in nums]
+        self.nums = []
+        for n in nums:
+            self.add(n)
 
     def get_parent_idx(self, i):
         return i // 2
-
-    def get_right_child_idx(self, i):
-        return 2 * i + 1
-
-    def get_left_child_idx(self, i):
-        return 2 * i + 2
 
     def should_swap(self, idx):
         if idx == 0:
@@ -27,33 +23,34 @@ class KthLargest:
 
     def heapify_up(self):
         idx = len(self.nums) - 1
-        while self.should_swap(idx):
+        should_swap = self.should_swap(idx)
+        while should_swap:
             element = self.nums[idx]
+            if idx == self.k:
+                return element
             idx = self.swap(idx, element)
+            should_swap = self.should_swap(idx)
 
     def kthLargest(self, k, nums):
         self.k = k
         self.nums = nums
-        self.heapify_up()
-        return self.check_kth_largest()
-
-    def check_kth_largest(self):
-        j = len(self.nums)
-        idx = 0
-        while j > idx and j != self.k:
-            left_child = self.nums[self.get_left_child_idx(idx)]
-            right_child = self.nums[self.get_right_child_idx(idx)]
-            val = self.nums[idx]
-            if left_child > val or right_child >
+        kth_largest = self.heapify_up()
+        return kth_largest
 
     def add(self, val: int) -> int:
         self.nums.append(val)
-        self.heapify_up()
-        return self.check_kth_largest()
+        kth_largest = self.heapify_up()
+        return kth_largest
+
 
 
 # Your KthLargest object will be instantiated and called as such:
 # obj = KthLargest(k, nums)
 # param_1 = obj.add(val)
-if __name__ == "__main__":
-    ...
+
+    testcase = [[4, [7, 7, 7, 7, 8, 3]], 2, 10, 9, 9]
+    obj = KthLargest(*testcase[0])
+    param_1 = obj.add(testcase[1])
+    param_2 = obj.add(testcase[2])
+    param_3 = obj.add(testcase[3])
+    param_4 = obj.add(testcase[4])
